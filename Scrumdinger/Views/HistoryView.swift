@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct HistoryView: View {
     let history: History
 
@@ -25,11 +26,13 @@ struct HistoryView: View {
     }
 }
 
+
 extension History {
     var attendeeString: String {
         ListFormatter.localizedString(byJoining: attendees.map { $0.name })
     }
 }
+
 
 struct HistoryView_Previews: PreviewProvider {
     static var history: History {
@@ -45,3 +48,4 @@ struct HistoryView_Previews: PreviewProvider {
         HistoryView(history: history)
     }
 }
+

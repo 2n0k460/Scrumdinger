@@ -1,5 +1,8 @@
-import SwiftUI
+/*
+ See LICENSE folder for this sample’s licensing information.
+ */
 
+import SwiftUI
 
 struct MeetingTimerView: View {
     let speakers: [ScrumTimer.Speaker]

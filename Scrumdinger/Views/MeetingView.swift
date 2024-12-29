@@ -1,3 +1,7 @@
+/*
+ See LICENSE folder for this sample’s licensing information.
+ */
+
 import SwiftUI
 import AVFoundation
 
@@ -9,9 +13,29 @@ struct MeetingView: View {
     
     private var player: AVPlayer { AVPlayer.sharedDingPlayer }
     
-    fileprivate func startScrum() {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 16.0)
+                .fill(scrum.theme.mainColor)
+            VStack {
+                MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed, secondsRemaining: scrumTimer.secondsRemaining, theme: scrum.theme)
+                MeetingTimerView(speakers: scrumTimer.speakers, isRecording: isRecording, theme: scrum.theme)
+                MeetingFooterView(speakers: scrumTimer.speakers, skipAction: scrumTimer.skipSpeaker)
+            }
+        }
+        .padding()
+        .foregroundColor(scrum.theme.accentColor)
+        .onAppear {
+            startScrum()
+        }
+        .onDisappear {
+            endScrum()
+        }
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private func startScrum() {
         scrumTimer.reset(lengthInMinutes: scrum.lengthInMinutes, attendees: scrum.attendees)
-        scrumTimer.startScrum()
         scrumTimer.speakerChangedAction = {
             player.seek(to: .zero)
             player.play()
@@ -22,35 +46,13 @@ struct MeetingView: View {
         scrumTimer.startScrum()
     }
     
-    fileprivate func endScrum() {
+    private func endScrum() {
         scrumTimer.stopScrum()
         speechRecognizer.stopTranscribing()
         isRecording = false
         let newHistory = History(attendees: scrum.attendees,
                                  transcript: speechRecognizer.transcript)
-    }
-    
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 16.0)
-                .fill(scrum.theme.mainColor)
-            VStack {
-                MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed,
-                                  secondsRemaining: scrumTimer.secondsRemaining,
-                                  theme: scrum.theme)
-                MeetingTimerView(speakers: scrumTimer.speakers, isRecording: isRecording, theme: scrum.theme)
-                MeetingFooterView(speakers: scrumTimer.speakers, skipAction: scrumTimer.skipSpeaker)
-            }
-            .padding()
-            .foregroundColor(scrum.theme.accentColor)
-            .onAppear {
-                startScrum()
-            }
-            .onDisappear {
-                endScrum()
-            }
-            .navigationBarTitleDisplayMode(.inline)
-        }
+        scrum.history.insert(newHistory, at: 0)
     }
 }
 

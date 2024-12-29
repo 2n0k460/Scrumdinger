@@ -1,9 +1,13 @@
+/*
+ See LICENSE folder for this sample’s licensing information.
+ */
+
 import SwiftUI
 
 struct DetailView: View {
     @Binding var scrum: DailyScrum
-
     @State private var editingScrum = DailyScrum.emptyScrum
+
     @State private var isPresentingEditView = false
     
     var body: some View {
@@ -41,9 +45,11 @@ struct DetailView: View {
                     Label("No meetings yet", systemImage: "calendar.badge.exclamationmark")
                 }
                 ForEach(scrum.history) { history in
-                    HStack {
-                        Image(systemName: "calendar")
-                        Text(history.date, style: .date)
+                    NavigationLink(destination: HistoryView(history: history)) {
+                        HStack {
+                            Image(systemName: "calendar")
+                            Text(history.date, style: .date)
+                        }
                     }
                 }
             }
@@ -57,7 +63,8 @@ struct DetailView: View {
         }
         .sheet(isPresented: $isPresentingEditView) {
             NavigationStack {
-                DetailEditView(scrum: $editingScrum)                    .navigationTitle(scrum.title)
+                DetailEditView(scrum: $editingScrum)
+                    .navigationTitle(scrum.title)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {

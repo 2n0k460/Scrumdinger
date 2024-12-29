@@ -1,8 +1,11 @@
+/*
+ See LICENSE folder for this sample’s licensing information.
+ */
+
 import Foundation
 import AVFoundation
 import Speech
 import SwiftUI
-
 
 /// A helper for transcribing speech to text using SFSpeechRecognizer and AVAudioEngine.
 actor SpeechRecognizer: ObservableObject {
@@ -160,7 +163,6 @@ actor SpeechRecognizer: ObservableObject {
     }
 }
 
-
 extension SFSpeechRecognizer {
     static func hasAuthorizationToRecognize() async -> Bool {
         await withCheckedContinuation { continuation in
@@ -170,7 +172,6 @@ extension SFSpeechRecognizer {
         }
     }
 }
-
 
 extension AVAudioSession {
     func hasPermissionToRecord() async -> Bool {
