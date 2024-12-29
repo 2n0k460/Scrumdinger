@@ -26,8 +26,8 @@ struct MeetingView: View {
         scrumTimer.stopScrum()
         speechRecognizer.stopTranscribing()
         isRecording = false
-        let newHistory = History(attendees: scrum.attendees)
-        scrum.history.insert(newHistory, at: 0)
+        let newHistory = History(attendees: scrum.attendees,
+                                 transcript: speechRecognizer.transcript)
     }
     
     var body: some View {
